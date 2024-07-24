@@ -58,8 +58,6 @@ public class Deck {
         // Variables which will be filled with most valuable card in hand
         Suit highestSuit = Suit.CLUB;
         Rank highestRank = Rank.TWO;
-        Card highestSuitCard = hand[0];
-        Card highestRankCard = hand[0];
 
         Map<Integer, ArrayList<Card>> rankMap = new HashMap<>(); 
 
@@ -83,70 +81,74 @@ public class Deck {
             // getting most valuable card from the rank value
             if (highestRank.getValue() < hand[i].rank.getValue()) {
                 highestRank = hand[i].rank;
-                highestRankCard = hand[i];
+                highestSuit = hand[i].suit;
+            } else if (highestRank.getValue() == hand[i].rank.getValue()){
+                if (highestSuit.getValue() < hand[i].suit.getValue()) {
+                    highestSuit = hand[i].suit;
+                }
             }
             
-            // getting most valuable card from the suit value
-            if (highestSuit.getValue() < hand[i].suit.getValue()) {
-                highestSuit = hand[i].suit;
-                highestSuitCard = hand[i];
-            }
         }
 
-
         // Condition for royal flush
-        if (cardRank.containsAll(Arrays.asList(royalFlush))) {
-            return new Player(name, HandRanking.ROYAL_FLUSH, highestRankCard, highestSuitCard);
+        if (cardRank.containsAll(Arrays.asList(royalFlush)) && cardSuitSet.size() == 1) {
+            return new Player(name, HandRanking.ROYAL_FLUSH, highestRank, highestSuit);
         } 
         
         // Condition for Straight flush
         if (cardSuitSet.size() == 1 && cardRankSet.size() == 5 && checkOrdered(cardRankValue)){
-            return new Player(name, HandRanking.STRAIGHT_FLUSH, highestRankCard, highestSuitCard);
+            if (cardRankValue.contains(1)){
+                return new Player(name, HandRanking.STRAIGHT_FLUSH, Rank.FIVE, highestSuit);
+            }
+            return new Player(name, HandRanking.STRAIGHT_FLUSH, highestRank, highestSuit);
         } 
         
         // Condition for four of a kind
         HandRankValidationResp result = checkCardsWithSameRank(rankMap, 4);
         if (result.result) {
-            return new Player(name, HandRanking.FOUR_OF_A_KIND, result.highestRankCard, result.highestSuitCard);
+            return new Player(name, HandRanking.FOUR_OF_A_KIND, result.highestRank, result.highestSuit);
         }
         
         // Condition for full house
         HandRankValidationResp result1 = checkCardsWithSameRank(rankMap, 3);
         HandRankValidationResp result2 = checkCardsWithSameRank(rankMap, 2);
         if (result1.result && result2.result) {
-            return new Player(name, HandRanking.FULL_HOUSE, result1.highestRankCard, result1.highestSuitCard);
+            return new Player(name, HandRanking.FULL_HOUSE, result1.highestRank, result1.highestSuit);
         }
         
         // Condition for flush
         if (cardSuitSet.size() == 1) {
-            return new Player(name, HandRanking.FLUSH, highestRankCard, highestSuitCard);
+            return new Player(name, HandRanking.FLUSH, highestRank, highestSuit);
         } 
         
         // Condition for straight
         if (cardRankSet.size() == 5 && checkOrdered(cardRankValue)) {
-            return new Player(name, HandRanking.STRAIGHT, highestRankCard, highestSuitCard);
+            if (cardRankValue.contains(1)){
+                return new Player(name, HandRanking.STRAIGHT, Rank.FIVE, highestSuit);
+            }
+            return new Player(name, HandRanking.STRAIGHT, highestRank, highestSuit);
         } 
         
         // Condition for three of a kind
         result = checkCardsWithSameRank(rankMap, 3);
         if (result.result) {
-            return new Player(name, HandRanking.THREE_OF_A_KIND, highestRankCard, highestSuitCard);
+            return new Player(name, HandRanking.THREE_OF_A_KIND, result.highestRank, result.highestSuit);
         }
         
         // Condition for two pairs
         result = checkTwoPairsCount(rankMap);
         if (result.result) {
-            return new Player(name, HandRanking.TWO_PAIRS, result.highestRankCard, result.highestSuitCard);
+            return new Player(name, HandRanking.TWO_PAIRS, result.highestRank, result.highestSuit);
         } 
         
         // Condition for pairs
         result = checkCardsWithSameRank(rankMap, 2);
         if (result.result) {
-            return new Player(name, HandRanking.ONE_PAIR, result.highestRankCard, result.highestSuitCard);
+            return new Player(name, HandRanking.ONE_PAIR, result.highestRank, result.highestSuit);
         } 
 
         //Condition for Nothing 
-        return new Player(name, HandRanking.NOTHING, highestRankCard, highestSuitCard);
+        return new Player(name, HandRanking.NOTHING, highestRank, highestSuit);
     }
 
     // Method to check if cards in hand is sequantial in ranks
@@ -172,23 +174,19 @@ public class Deck {
         int count = 0;
         Rank highestRank = Rank.TWO;
         Suit highestSuit = Suit.CLUB;
-        Card highestRankCard = null;
-        Card highestSuitCard = null;
         
         boolean result = false;
         for (ArrayList<Card> value : map.values()) {
             if (value.size() == 2) {
-                highestRankCard = value.get(0);
-                highestSuitCard = value.get(0);
                 count++;
                 for (Card current : value) {
                     if (highestRank.getValue() < current.rank.getValue()) {
                         highestRank = current.rank;
-                        highestRankCard = current;
-                    }
-                    if (highestSuit.getValue() < current.suit.getValue()) {
                         highestSuit = current.suit;
-                        highestSuitCard = current;
+                    } else if (highestRank.getValue() == current.rank.getValue()) {
+                        if (highestSuit.getValue() < current.suit.getValue()) {
+                            highestSuit = current.suit;
+                        } 
                     }
                 }
             }
@@ -196,7 +194,7 @@ public class Deck {
         if (count >= 2) {
             result = true;
         }
-        return new HandRankValidationResp(highestRankCard, highestSuitCard, result);
+        return new HandRankValidationResp(highestRank, highestSuit, result);
 
     }
 
@@ -204,28 +202,24 @@ public class Deck {
     public HandRankValidationResp checkCardsWithSameRank(Map<Integer, ArrayList<Card>> map, int num) {
         Rank highestRank = Rank.TWO;
         Suit highestSuit = Suit.CLUB;
-        Card highestRankCard = null;
-        Card highestSuitCard = null;
         
         boolean result = false;
 
         for (ArrayList<Card> data: map.values()) {
             if (data.size() == num) {
                 result = true;
-                highestRankCard = data.get(0);
-                highestSuitCard = data.get(0);
                 for (Card current : data) {
                     if (highestRank.getValue() < current.rank.getValue()) {
                         highestRank = current.rank;
-                        highestRankCard = current;
-                    }
-                    if (highestSuit.getValue() < current.suit.getValue()) {
                         highestSuit = current.suit;
-                        highestSuitCard = current;
+                    } else if (highestRank.getValue() == current.rank.getValue()) {
+                        if (highestSuit.getValue() < current.suit.getValue()) {
+                            highestSuit = current.suit;
+                        } 
                     }
                 }
             }
         }
-        return new HandRankValidationResp(highestRankCard, highestSuitCard, result);
+        return new HandRankValidationResp(highestRank, highestSuit, result);
     }
 }

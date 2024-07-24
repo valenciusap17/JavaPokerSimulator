@@ -1,17 +1,11 @@
 package bankjago;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class Main {
     private static Scanner scanner; 
@@ -54,15 +48,15 @@ public class Main {
                 if (handRanksComparison == 0) {
                     if (p1.handRanking.getValue() > 5) {
                         //Highest suit then highest rank
-                        handRanksComparison = Integer.compare(p2.highestSuitCard.suit.getValue(), p1.highestSuitCard.suit.getValue());
+                        handRanksComparison = Integer.compare(p2.highestSuit.getValue(), p1.highestSuit.getValue());
                         if (handRanksComparison == 0) {
-                            handRanksComparison = Integer.compare(p2.highestSuitCard.rank.getValue(), p1.highestSuitCard.rank.getValue());
+                            handRanksComparison = Integer.compare(p2.highestRank.getValue(), p1.highestRank.getValue());
                         }
                     } else {
                         //Highest rank then highest suit
-                        handRanksComparison = Integer.compare(p2.highestRankCard.rank.getValue(), p1.highestRankCard.rank.getValue());
+                        handRanksComparison = Integer.compare(p2.highestRank.getValue(), p1.highestRank.getValue());
                         if (handRanksComparison == 0) {
-                            handRanksComparison = Integer.compare(p2.highestRankCard.suit.getValue(), p1.highestRankCard.suit.getValue());
+                            handRanksComparison = Integer.compare(p2.highestSuit.getValue(), p1.highestSuit.getValue());
                         }
                     }
                 }
@@ -98,20 +92,12 @@ public class Main {
             System.out.println("Player with rank " + counter);
             Player currentPlayer = playerHandRanksPq.poll();
             if (currentPlayer.handRanking.getValue() > 5) {
-                System.out.println(currentPlayer.name + " with hand rank: " + currentPlayer.handRanking.getName() + ", most valuable card rank: " + currentPlayer.highestSuitCard.rank.getName() + " and it's suit: " + currentPlayer.highestSuitCard.suit.getName());
+                System.out.println(currentPlayer.name + " with hand rank: " + currentPlayer.handRanking.getName() + ", most valuable card rank: " + currentPlayer.highestRank.getName() + " and it's suit: " + currentPlayer.highestSuit.getName());
             } else {
-                System.out.println(currentPlayer.name + " with hand rank: " + currentPlayer.handRanking.getName() + ", most valuable card rank: " + currentPlayer.highestRankCard.rank.getName() + " and it's suit: " + currentPlayer.highestRankCard.suit.getName());
+                System.out.println(currentPlayer.name + " with hand rank: " + currentPlayer.handRanking.getName() + ", most valuable card rank: " + currentPlayer.highestRank.getName() + " and it's suit: " + currentPlayer.highestSuit.getName());
             }
             counter++;
         }
-        System.out.println("EXPERIMENT: ");
-        Player custom = deck.Validate("experiment", PokerHandTest.getCustomTest());
-        System.out.println(custom.handRanking.getName());
-        System.out.println(custom.highestRankCard.rank.getName());
-        System.out.println(custom.highestRankCard.suit.getName());
-        System.out.println(custom.highestSuitCard.rank.getName());
-        System.out.println(custom.highestSuitCard.suit.getName());
-        // System.out.println(custom.handRanking.getName());
 
         scanner.close();
     }

@@ -14,7 +14,7 @@ public class PokerHandTest {
 
     public static Card[] getStraightFlushTest() {
         return new Card[]{
-            new Card(Suit.HEART, Rank.SEVEN), 
+            new Card(Suit.HEART, Rank.SIX), 
             new Card(Suit.HEART, Rank.TWO), 
             new Card(Suit.HEART, Rank.THREE), 
             new Card(Suit.HEART, Rank.FOUR), 
@@ -35,7 +35,7 @@ public class PokerHandTest {
         return new Card[]{
             new Card(Suit.HEART, Rank.THREE), 
             new Card(Suit.CLUB, Rank.THREE), 
-            new Card(Suit.HEART, Rank.THREE), 
+            new Card(Suit.DIAMOND, Rank.THREE), 
             new Card(Suit.SPADE, Rank.FIVE), 
             new Card(Suit.HEART, Rank.FIVE), 
         };
@@ -60,11 +60,11 @@ public class PokerHandTest {
     };
     public static Card[] getThreeOfAKindTest() {
         return new Card[]{
-            new Card(Suit.DIAMOND, Rank.SEVEN), 
-            new Card(Suit.HEART, Rank.SEVEN), 
-            new Card(Suit.DIAMOND, Rank.SEVEN), 
-            new Card(Suit.HEART, Rank.FIVE), 
-            new Card(Suit.SPADE, Rank.FOUR), 
+            new Card(Suit.DIAMOND, Rank.KING), 
+            new Card(Suit.HEART, Rank.KING), 
+            new Card(Suit.DIAMOND, Rank.SIX), 
+            new Card(Suit.CLUB, Rank.KING), 
+            new Card(Suit.DIAMOND, Rank.TEN), 
         };
     };
     public static Card[] getTwoPairsTest(){
@@ -85,13 +85,22 @@ public class PokerHandTest {
             new Card(Suit.SPADE, Rank.FOUR), 
         };
     };
+    public static Card[] getNothingTest() {
+        return new Card[]{
+            new Card(Suit.CLUB, Rank.SIX), 
+            new Card(Suit.SPADE, Rank.THREE), 
+            new Card(Suit.HEART, Rank.NINE), 
+            new Card(Suit.CLUB, Rank.KING), 
+            new Card(Suit.HEART, Rank.JACK), 
+        };
+    };
 
     public static Card[] getCustomTest() {
         return new Card[]{
-            new Card(Suit.HEART, Rank.KING), 
-            new Card(Suit.DIAMOND, Rank.KING), 
-            new Card(Suit.DIAMOND, Rank.SIX), 
-            new Card(Suit.CLUB, Rank.EIGHT), 
+            new Card(Suit.CLUB, Rank.TWO), 
+            new Card(Suit.CLUB, Rank.TEN), 
+            new Card(Suit.HEART, Rank.TEN), 
+            new Card(Suit.CLUB, Rank.QUEEN), 
             new Card(Suit.DIAMOND, Rank.TEN), 
         };
     };
