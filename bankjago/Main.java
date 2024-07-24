@@ -99,6 +99,13 @@ public class Main {
             counter++;
         }
 
+        // Uncomment code below to use test cases in PokerHandTest.java 
+        // System.out.println("exeecute test case: ");
+        // Player custom = deck.Validate("experiment", PokerHandTest.getCustomTest());
+        // System.out.println(custom.handRanking.getName());
+        // System.out.println(custom.highestRank.getName());
+        // System.out.println(custom.highestSuit.getName());
+
         scanner.close();
     }
 }
